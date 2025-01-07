@@ -4,7 +4,7 @@
         "files": [
             {
                 "repo": "bunker-image-crawler",
-                "paths": ["inject.js"]
+                "paths": ["inject.js", "styles.css", "domUtils.js", "urlUtils.js", "htmlUtils.js"]
             }
         ]
     }
