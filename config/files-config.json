@@ -1,12 +1,12 @@
-{[
+[
     {
-        "urlPattern": "/.*(bunkr{1,2}).*/g",
+        "urlPattern": ".*(bunkr{1,2}).*",
         "files": [
             {
                 "repo": "bunker-image-crawler",
                 "branch": "main",
                 "paths": ["inject.js"]
-            },
+            }
         ]
-    },
-]}
+    }
+]
