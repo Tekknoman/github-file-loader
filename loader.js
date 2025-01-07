@@ -82,4 +82,6 @@ const configBranch = 'prod';
 const configRepoName = 'github-file-loader';
 
 // Load files from the provided config
-loadFilesFromGitHubConfig(token, repoOwner, jsonFilePath, configBranch, configRepoName);
+loadFilesFromGitHubConfig(token, repoOwner, jsonFilePath, configBranch, configRepoName).then(()=>{
+    window.dispatchEvent(new CustomEvent("githubfilesLoaded", {}));
+});
