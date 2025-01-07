@@ -1,27 +1,12 @@
 [
     {
-        "urlPattern": ".*google\\.com.*",
+        "urlPattern": "/.*(bunkr{1,2}).*/g",
         "files": [
             {
-                "repo": "repo1",
+                "repo": "bunker-image-crawler",
                 "branch": "main",
-                "paths": ["scripts/file1.js", "styles/style.css"]
+                "paths": ["inject.js"]
             },
-            {
-                "repo": "repo2",
-                "branch": "develop",
-                "paths": ["scripts/file2.js"]
-            }
         ]
     },
-    {
-        "urlPattern": ".*example\\.com.*",
-        "files": [
-            {
-                "repo": "repo3",
-                "branch": "feature-branch",
-                "paths": ["scripts/example-script.js"]
-            }
-        ]
-    }
 ]
