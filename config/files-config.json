@@ -1,10 +1,24 @@
 [
     {
-        "files": ["scripts/file1.js", "styles/style.css"],
-        "urlPattern": "google.com"
+        "urlPattern": ".*google\\.com.*",
+        "files": [
+            {
+                "repo": "repo1",
+                "paths": ["scripts/file1.js", "styles/style.css"]
+            },
+            {
+                "repo": "repo2",
+                "paths": ["scripts/file2.js"]
+            }
+        ]
     },
     {
-        "files": ["scripts/file2.js"],
-        "urlPattern": "example.com"
+        "urlPattern": ".*example\\.com.*",
+        "files": [
+            {
+                "repo": "repo3",
+                "paths": ["scripts/example-script.js"]
+            }
+        ]
     }
 ]
