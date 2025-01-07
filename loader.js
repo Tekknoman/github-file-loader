@@ -1,22 +1,28 @@
+async function fetchFile(token, repoOwner, repoName, branch, filePath){
+  	const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}?ref=${branch}`;
+    const currentUrl = window.location.hostname;
+    // Fetch the JSON config file
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3.raw'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error loading JSON config: ${response.statusText}`);
+    }
+  return response;
+}
+
 // Load files from multiple repositories, branches, and handle regex for URL patterns
-async function loadFilesFromGitHubConfig(token, repoOwner, jsonFilePath) {
-    const url = `https://api.github.com/repos/${repoOwner}/${jsonFilePath}`;
+async function loadFilesFromGitHubConfig(token, repoOwner, jsonFilePath, configBranch, configRepoName) {
     const currentUrl = window.location.hostname;
 
     try {
         // Fetch the JSON config file
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `token ${token}`,
-                'Accept': 'application/vnd.github.v3.raw'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error loading JSON config: ${response.statusText}`);
-        }
-
+        const response = await fetchFile(token, repoOwner, configRepoName, configBranch, jsonFilePath);
         const config = await response.json();
 
         // Match the URL using regex
@@ -43,19 +49,9 @@ async function loadFilesFromGitHubConfig(token, repoOwner, jsonFilePath) {
 
 // Fetch and inject a file from a specific repository and branch
 async function fetchAndInjectGitHubFile(token, repoOwner, repoName, branch, filePath) {
-    const url = `https://raw.githubusercontent.com/${repoOwner}/${repoName}/${branch}/${filePath}`;
 
     try {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `token ${token}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error fetching file from ${repoName}/${branch}: ${response.statusText}`);
-        }
+        const response = await fetchFile(token, repoOwner, repoName, branch, filePath)
 
         const content = await response.text();
 
@@ -82,6 +78,8 @@ async function fetchAndInjectGitHubFile(token, repoOwner, repoName, branch, file
 const token = 'YOUR_PERSONAL_ACCESS_TOKEN';  // Ensure secure storage in production
 const repoOwner = 'username';
 const jsonFilePath = 'config/files-config.json';
+const configBranch = 'prod';
+const configRepoName = 'github-file-loader';
 
 // Load files from the provided config
-loadFilesFromGitHubConfig(token, repoOwner, jsonFilePath);
+loadFilesFromGitHubConfig(token, repoOwner, jsonFilePath, configBranch, configRepoName);
