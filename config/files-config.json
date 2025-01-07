@@ -4,7 +4,7 @@
         "files": [
             {
                 "repo": "bunker-image-crawler",
-                "branch": "main",
+                "branch": "prod",
                 "paths": ["inject.js"]
             }
         ]
