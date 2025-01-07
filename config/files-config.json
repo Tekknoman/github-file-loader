@@ -1,0 +1,10 @@
+[
+    {
+        "files": ["scripts/file1.js", "styles/style.css"],
+        "urlPattern": "google.com"
+    },
+    {
+        "files": ["scripts/file2.js"],
+        "urlPattern": "example.com"
+    }
+]
