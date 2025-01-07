@@ -4,10 +4,12 @@
         "files": [
             {
                 "repo": "repo1",
+                "branch": "main",
                 "paths": ["scripts/file1.js", "styles/style.css"]
             },
             {
                 "repo": "repo2",
+                "branch": "develop",
                 "paths": ["scripts/file2.js"]
             }
         ]
@@ -17,6 +19,7 @@
         "files": [
             {
                 "repo": "repo3",
+                "branch": "feature-branch",
                 "paths": ["scripts/example-script.js"]
             }
         ]
