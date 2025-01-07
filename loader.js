@@ -1,6 +1,6 @@
-async function fetchFile(token, repoOwner, repoName, branch, filePath){
-  	const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}?ref=${branch}`;
-    const currentUrl = window.location.hostname;
+async function fetchFile(token, repoOwner, repoName, filePath, branch){
+  	const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}${branch ? "?ref="+ branch : ""}`;
+
     // Fetch the JSON config file
     const response = await fetch(url, {
       method: 'GET',
@@ -22,7 +22,7 @@ async function loadFilesFromGitHubConfig(token, repoOwner, jsonFilePath, configB
 
     try {
         // Fetch the JSON config file
-        const response = await fetchFile(token, repoOwner, configRepoName, configBranch, jsonFilePath);
+        const response = await fetchFile(token, repoOwner, configRepoName, jsonFilePath, configBranch);
         const config = await response.json();
 
         // Match the URL using regex
@@ -51,7 +51,7 @@ async function loadFilesFromGitHubConfig(token, repoOwner, jsonFilePath, configB
 async function fetchAndInjectGitHubFile(token, repoOwner, repoName, branch, filePath) {
 
     try {
-        const response = await fetchFile(token, repoOwner, repoName, branch, filePath)
+        const response = await fetchFile(token, repoOwner, repoName, filePath, branch);
 
         const content = await response.text();
 
