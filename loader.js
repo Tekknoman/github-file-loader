@@ -1,10 +1,10 @@
-// Load the JSON configuration and inject files based on the current URL pattern
-async function loadFilesFromGitHubConfig(token, repoOwner, repoName, jsonFilePath) {
-    const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${jsonFilePath}`;
-    const currentUrl = window.location.hostname; // Current domain for pattern matching
+// Load multiple files from multiple repositories with regex-based URL pattern matching
+async function loadFilesFromGitHubConfig(token, repoOwner, jsonFilePath) {
+    const url = `https://api.github.com/repos/${repoOwner}/${jsonFilePath}`;
+    const currentUrl = window.location.hostname;
 
     try {
-        // Fetch the JSON configuration file
+        // Fetch the JSON config file
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -17,18 +17,22 @@ async function loadFilesFromGitHubConfig(token, repoOwner, repoName, jsonFilePat
             throw new Error(`Error loading JSON config: ${response.statusText}`);
         }
 
-        // Parse the JSON content
+        // Parse the configuration
         const config = await response.json();
 
-        // Find matching files for the current URL pattern
-        const matchingConfig = config.find(entry => currentUrl.includes(entry.urlPattern));
+        // Find matching entries using regex
+        const matchingConfig = config.find(entry => 
+            new RegExp(entry.urlPattern).test(currentUrl)
+        );
 
         if (matchingConfig) {
-            console.log(`Loading files for URL pattern: ${matchingConfig.urlPattern}`);
-
-            // Load the files specified for the matching pattern
-            for (const filePath of matchingConfig.files) {
-                await fetchAndInjectGitHubFile(token, repoOwner, repoName, filePath);
+            console.log(`Loading files for pattern: ${matchingConfig.urlPattern}`);
+            
+            // Loop through each repo and load specified files
+            for (const repoEntry of matchingConfig.files) {
+                for (const filePath of repoEntry.paths) {
+                    await fetchAndInjectGitHubFile(token, repoOwner, repoEntry.repo, filePath);
+                }
             }
         } else {
             console.warn('No matching URL pattern found in the configuration.');
@@ -38,10 +42,10 @@ async function loadFilesFromGitHubConfig(token, repoOwner, repoName, jsonFilePat
     }
 }
 
-// Reusable function to fetch and inject a single file
+// Fetch and inject a file from a specified repository
 async function fetchAndInjectGitHubFile(token, repoOwner, repoName, filePath) {
     const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
-    
+
     try {
         const response = await fetch(url, {
             method: 'GET',
@@ -57,7 +61,7 @@ async function fetchAndInjectGitHubFile(token, repoOwner, repoName, filePath) {
 
         const content = await response.text();
 
-        // Dynamic content injection based on file type
+        // Inject file content dynamically based on file type
         if (filePath.endsWith('.js')) {
             const scriptElement = document.createElement('script');
             scriptElement.textContent = content;
@@ -67,20 +71,19 @@ async function fetchAndInjectGitHubFile(token, repoOwner, repoName, filePath) {
             styleElement.textContent = content;
             document.head.appendChild(styleElement);
         } else {
-            console.log(`File type not supported for direct injection: ${filePath}`);
+            console.warn(`Unsupported file type for injection: ${filePath}`);
         }
 
         console.log(`Successfully loaded: ${filePath}`);
     } catch (error) {
-        console.error(`Error loading file: ${filePath}`, error);
+        console.error(`Error loading file from repo ${repoName}: ${filePath}`, error);
     }
 }
 
-// ✅ Example Usage (Loading config from a private GitHub repo)
-const token = 'YOUR_PERSONAL_ACCESS_TOKEN';  // Use environment variables for security
+// ✅ Example Usage:
+const token = 'YOUR_PERSONAL_ACCESS_TOKEN';  // Replace with a secure handling method
 const repoOwner = 'username';
-const repoName = 'repo-name';
 const jsonFilePath = 'config/files-config.json';
 
-// Trigger loading based on the current URL
-loadFilesFromGitHubConfig(token, repoOwner, repoName, jsonFilePath);
+// Trigger file loading based on the current URL and the JSON config
+loadFilesFromGitHubConfig(token, repoOwner, jsonFilePath);
