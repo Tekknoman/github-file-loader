@@ -8,5 +8,15 @@
                 "paths": ["inject.js", "styles.css", "domUtils.js", "urlUtils.js", "htmlUtils.js", "videoUtils.js"]
             }
         ]
+    },
+    {
+        "urlPattern": ".*coomer.su.*",
+        "files": [
+            {
+                "repo": "coomer-ui",
+                "branch": "prod",
+                "paths": ["index.html"]
+            }
+        ]
     }
 ]
