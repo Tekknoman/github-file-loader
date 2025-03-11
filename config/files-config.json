@@ -15,7 +15,7 @@
             {
                 "repo": "coomer-ui",
                 "branch": "prod",
-                "paths": ["index.html"]
+                "paths": ["ui.html"]
             }
         ]
     }
