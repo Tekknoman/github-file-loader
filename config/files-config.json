@@ -18,5 +18,15 @@
                 "paths": ["ui.html"]
             }
         ]
+    },
+    {
+        "urlPattern": ".*chatgpt.com.*",
+        "files": [
+            {
+                "repo": "cchat-gpt-uiMod",
+                "branch": "prod",
+                "paths": ["chatTimestamp.js", "messageTimestamp.js", "control.js"]
+            }
+        ]
     }
 ]
